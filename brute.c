@@ -2,20 +2,26 @@
 #include <stdlib.h>
 #include <string.h>
 
-int main()
+int main(int argc,char* argv[])
 {
 	char map[95]="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ~!@#$%^&*()_+`-={}|[]\\;':\",./<>?";
 	int map_len=strlen(map);
-	int pass_len=2;
+	int pass_len=5;
 	int ii=0;
-	int* spots=(int*)malloc(pass_len*sizeof(int));
-	char* pass=(char*)malloc(pass_len);
+	int* spots=NULL;
+	char* pass=NULL;
 
-	if(spots==NULL||pass==NULL)
-		return 2;
+	if(argc>1)
+		pass_len=(int)strtol(argv[1],NULL,10);
 
 	if(pass_len>0)
 	{
+		spots=(int*)malloc(pass_len*sizeof(int));
+		pass=(char*)malloc(pass_len);
+
+		if(spots==NULL||pass==NULL)
+			return 2;
+
 		for(ii=0;ii<pass_len;++ii)
 			spots[ii]=-1;
 
