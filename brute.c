@@ -4,7 +4,7 @@
 
 int main(int argc,char* argv[])
 {
-	char map[95]="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ~!@#$%^&*()_+`-={}|[]\\;':\",./<>?";
+	char* map="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ";
 	int map_len=strlen(map);
 	int pass_len=5;
 	int ii=0;
@@ -26,6 +26,9 @@ int main(int argc,char* argv[])
 			spots[ii]=-1;
 
 		memset(pass,0,pass_len);
+
+		if(argc>2)
+			snprintf(pass,pass_len+1,"%s",argv[2]);
 
 		while(1)
 		{
