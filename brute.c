@@ -2,7 +2,15 @@
 #include <stdlib.h>
 #include <string.h>
 
-void help()
+inline void print(char* pass,int show)
+{
+	printf("%s\n",pass);
+
+	if(show!=0)
+		fprintf(stderr,"\r  Current:  %s",pass);
+}
+
+inline void help()
 {
 	printf("Usage:  ./brute [--help] [--map STR] [--len INT] [--show]\n");
 	printf("  --help       Show this menu.\n");
@@ -92,6 +100,8 @@ int main(int argc,char* argv[])
 	fprintf(stderr,"  Length:   %d\n",pass_len);
 	fprintf(stderr,"  Map:      %s\n",map);
 
+	print("",show);
+
 	if(pass_len>0)
 	{
 		spots=(int*)malloc(pass_len*sizeof(int));
@@ -124,10 +134,7 @@ int main(int argc,char* argv[])
 					pass[ii]=map[spots[ii]];
 			}
 
-			printf("%s\n",pass);
-
-			if(show!=0)
-				fprintf(stderr,"\r  Current:  %s",pass);
+			print(pass,show);
 		}
 	}
 
