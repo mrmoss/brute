@@ -4,7 +4,7 @@ Usage:  ./brute [--help] [--map STR] [--len INT] [--show]
 
   --help       Show this menu.
 
-  --map STR    String of characters to use for password generation (default is a-zA-Z0-9).
+  --map STR    String of characters to use for password generation (default is all printable characters).
 
   --len INT    Length of password (includes passwords of size less than as well).
 

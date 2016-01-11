@@ -6,7 +6,7 @@ void help()
 {
 	printf("Usage:  ./brute [--help] [--map STR] [--len INT] [--show]\n");
 	printf("  --help       Show this menu.\n");
-	printf("  --map STR    String of characters to use for password generation (default is a-zA-Z0-9).\n");
+	printf("  --map STR    String of characters to use for password generation (default is all printable characters).\n");
 	printf("  --len INT    Length of password (includes passwords of size less than as well).\n");
 	printf("  --show       Shows the passwords in stderr (nice for viewing current password when redirecting passwords to a file).\n");
 	exit(0);
@@ -14,7 +14,7 @@ void help()
 
 int main(int argc,char* argv[])
 {
-	char* default_map="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+	char* default_map="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ~`!@#$%^&*()_+-={}[]|\\:;\"'<,>.?/";
 
 	char* map=(char*)malloc(strlen(default_map)+1);
 
