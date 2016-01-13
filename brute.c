@@ -5,7 +5,6 @@
 inline void print(char* pass,int show)
 {
 	printf("%s\n",pass);
-	fflush(stdout);
 
 	if(show!=0)
 		fprintf(stderr,"\r  Current:      %s",pass);
