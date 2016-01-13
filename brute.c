@@ -5,18 +5,20 @@
 inline void print(char* pass,int show)
 {
 	printf("%s\n",pass);
+	fflush(stdout);
 
 	if(show!=0)
-		fprintf(stderr,"\r  Current:  %s",pass);
+		fprintf(stderr,"\r  Current:      %s",pass);
 }
 
 inline void help()
 {
-	printf("Usage:  ./brute [--help] [--map STR] [--len INT] [--show]\n");
-	printf("  --help       Show this menu.\n");
-	printf("  --map STR    String of characters to use for password generation (default is all printable characters).\n");
-	printf("  --len INT    Length of password (includes passwords of size less than as well).\n");
-	printf("  --show       Shows the passwords in stderr (nice for viewing current password when redirecting passwords to a file).\n");
+	printf("Usage:  ./brute [--help] [--map STR] [--len INT] [--maxlen INT] [--show]\n");
+	printf("  --help        Show this menu.\n");
+	printf("  --map STR     String of characters to use for password generation (default is all printable characters).\n");
+	printf("  --maxlen INT  Length of passwords.\n");
+	printf("  --len INT     Length of passwords (includes passwords of size less than as well).\n");
+	printf("  --show        Shows the passwords in stderr (nice for viewing current password when redirecting passwords to a file).\n");
 	exit(0);
 }
 
@@ -38,6 +40,7 @@ int main(int argc,char* argv[])
 	int* spots=NULL;
 	char* pass=NULL;
 	int show=0;
+	int abs_len=1;
 
 	memset(map,0,strlen(default_map)+1);
 	strncpy(map,default_map,strlen(default_map));
@@ -50,7 +53,7 @@ int main(int argc,char* argv[])
 		}
 		else if(strlen(argv[ii])==5&&strncmp(argv[ii],"--map",5)==0)
 		{
-			if(ii+1>=argc)
+			if(ii+1>=argc||strlen(argv[ii+1])<=0)
 			{
 				fprintf(stderr,"Expected argument after \"--map\".\n");
 				exit(1);
@@ -81,6 +84,19 @@ int main(int argc,char* argv[])
 
 			++ii;
 			pass_len=(int)strtol(argv[ii],NULL,10);
+			abs_len=1;
+		}
+		else if(strlen(argv[ii])==8&&strncmp(argv[ii],"--maxlen",8)==0)
+		{
+			if(ii+1>=argc)
+			{
+				fprintf(stderr,"Expected argument after \"--maxlen\".\n");
+				exit(1);
+			}
+
+			++ii;
+			pass_len=(int)strtol(argv[ii],NULL,10);
+			abs_len=0;
 		}
 		else if(strlen(argv[ii])==6&&strncmp(argv[ii],"--show",6)==0)
 		{
@@ -97,10 +113,16 @@ int main(int argc,char* argv[])
 		help();
 
 	fprintf(stderr,"Generating Passwords\n");
-	fprintf(stderr,"  Length:   %d\n",pass_len);
-	fprintf(stderr,"  Map:      %s\n",map);
 
-	print("",show);
+	if(abs_len==1)
+		fprintf(stderr,"  Length:       %d\n",pass_len);
+	else
+		fprintf(stderr,"  Max Length:   %d\n",pass_len);
+
+	fprintf(stderr,"  Map:              %s\n",map);
+
+	if(abs_len==0||pass_len==0)
+		print("",show);
 
 	if(pass_len>0)
 	{
@@ -114,6 +136,9 @@ int main(int argc,char* argv[])
 			spots[ii]=-1;
 
 		memset(pass,0,pass_len+1);
+
+		if(abs_len!=0)
+			memset(pass,map[0],pass_len);
 
 		while(1)
 		{

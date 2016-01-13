@@ -1,13 +1,15 @@
 Brute - A password generator.
 
-Usage:  ./brute [--help] [--map STR] [--len INT] [--show]
+Usage:  ./brute [--help] [--map STR] [--len INT] [--maxlen INT] [--show]
 
-  --help       Show this menu.
+  --help        Show this menu.
 
-  --map STR    String of characters to use for password generation (default is all printable characters).
+  --map STR     String of characters to use for password generation (default is all printable characters).
 
-  --len INT    Length of password (includes passwords of size less than as well).
+  --len INT     Length of passwords.
 
-  --show       Shows the passwords in stderr (nice for viewing current password when redirecting passwords to a file).
+  --maxlen INT  Length of passwords (includes passwords of size less than as well).
+
+  --show        Shows the passwords in stderr (nice for viewing current password when redirecting passwords to a file).
 
 Binary included is a statically stripped linux 32-bit binary.
