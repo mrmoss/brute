@@ -1,12 +1,12 @@
 Brute - A password generator.
 
-Usage:  ./brute [--help] [--map STR] [--len INT] [--maxlen INT] [--show]
+Usage:  ./brute [--help] [--alpha STR] [--len INT] [--maxlen INT] [--show]
 
   --help        Show this menu.
 
-  --map STR     String of characters to use for password generation (default is all printable characters).
+  --alpha STR   String of characters to use for password generation (default is all printable characters).
 
-  --len INT     Length of passwords.
+  --len INT     Length of passwords (default is 8).
 
   --maxlen INT  Length of passwords (includes passwords of size less than as well).
 

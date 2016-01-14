@@ -12,37 +12,37 @@ inline void print(char* pass,int show)
 
 inline void help()
 {
-	printf("Usage:  ./brute [--help] [--map STR] [--len INT] [--maxlen INT] [--show]\n");
+	printf("Usage:  ./brute [--help] [--alpha STR] [--len INT] [--maxlen INT] [--show]\n");
 	printf("  --help        Show this menu.\n");
-	printf("  --map STR     String of characters to use for password generation (default is all printable characters).\n");
-	printf("  --maxlen INT  Length of passwords.\n");
-	printf("  --len INT     Length of passwords (includes passwords of size less than as well).\n");
+	printf("  --alpha STR   String of characters to use for password generation (default is all printable characters).\n");
+	printf("  --len INT     Length of passwords (default is 8).\n");
+	printf("  --maxlen INT  Length of passwords (includes passwords of size less than as well).\n");
 	printf("  --show        Shows the passwords in stderr (nice for viewing current password when redirecting passwords to a file).\n");
 	exit(0);
 }
 
 int main(int argc,char* argv[])
 {
-	char* default_map="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ~`!@#$%^&*()_+-={}[]|\\:;\"'<,>.?/";
+	char* default_alpha="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ~`!@#$%^&*()_+-={}[]|\\:;\"'<,>.?/";
 
-	char* map=(char*)malloc(strlen(default_map)+1);
+	char* alpha=(char*)malloc(strlen(default_alpha)+1);
 
-	if(map==NULL)
+	if(alpha==NULL)
 	{
-		printf("Could not allocate memory for map.\n");
+		printf("Could not allocate memory for alphabet.\n");
 		exit(1);
 	}
 
-	int map_len=strlen(default_map);
-	int pass_len=-1;
+	int alpha_len=strlen(default_alpha);
+	int pass_len=8;
 	int ii=0;
 	int* spots=NULL;
 	char* pass=NULL;
 	int show=0;
 	int abs_len=1;
 
-	memset(map,0,strlen(default_map)+1);
-	strncpy(map,default_map,strlen(default_map));
+	memset(alpha,0,strlen(default_alpha)+1);
+	strncpy(alpha,default_alpha,strlen(default_alpha));
 
 	for(ii=1;ii<argc;++ii)
 	{
@@ -50,28 +50,27 @@ int main(int argc,char* argv[])
 		{
 			help();
 		}
-		else if(strlen(argv[ii])==5&&strncmp(argv[ii],"--map",5)==0)
+		else if(strlen(argv[ii])==7&&strncmp(argv[ii],"--alpha",7)==0)
 		{
 			if(ii+1>=argc||strlen(argv[ii+1])<=0)
 			{
-				fprintf(stderr,"Expected argument after \"--map\".\n");
+				fprintf(stderr,"Expected argument after \"--alpha\".\n");
 				exit(1);
 			}
 
 			++ii;
-			free(map);
-			map=NULL;
-			map=(char*)malloc(strlen(argv[ii])+1);
+			free(alpha);
+			alpha=(char*)malloc(strlen(argv[ii])+1);
 
-			if(map==NULL)
+			if(alpha==NULL)
 			{
-				printf("Could not allocate memory for map.\n");
+				printf("Could not allocate memory for alphabet.\n");
 				exit(1);
 			}
 
-			memset(map,0,strlen(argv[ii])+1);
-			strncpy(map,argv[ii],strlen(argv[ii]));
-			map_len=strlen(argv[ii]);
+			memset(alpha,0,strlen(argv[ii])+1);
+			strncpy(alpha,argv[ii],strlen(argv[ii]));
+			alpha_len=strlen(argv[ii]);
 		}
 		else if(strlen(argv[ii])==5&&strncmp(argv[ii],"--len",5)==0)
 		{
@@ -118,7 +117,7 @@ int main(int argc,char* argv[])
 	else
 		fprintf(stderr,"  Max Length:   %d\n",pass_len);
 
-	fprintf(stderr,"  Map:              %s\n",map);
+	fprintf(stderr,"  Alphabet:     %s\n",alpha);
 
 	if(abs_len==0||pass_len==0)
 		print("",show);
@@ -137,7 +136,7 @@ int main(int argc,char* argv[])
 		memset(pass,0,pass_len+1);
 
 		if(abs_len!=0)
-			memset(pass,map[0],pass_len);
+			memset(pass,alpha[0],pass_len);
 
 		while(1)
 		{
@@ -145,7 +144,7 @@ int main(int argc,char* argv[])
 
 			for(ii=0;ii<pass_len;++ii)
 			{
-				if(spots[ii]>=map_len)
+				if(spots[ii]>=alpha_len)
 				{
 					if(ii+1>=pass_len)
 						goto done; //goto==SHAME!
@@ -155,7 +154,7 @@ int main(int argc,char* argv[])
 				}
 
 				if(spots[ii]>=0)
-					pass[ii]=map[spots[ii]];
+					pass[ii]=alpha[spots[ii]];
 			}
 
 			print(pass,show);
@@ -166,7 +165,7 @@ int main(int argc,char* argv[])
 		if(show!=0)
 			fprintf(stderr,"\n  Done.\n");
 
-		free(map);
+		free(alpha);
 		free(spots);
 		free(pass);
 
