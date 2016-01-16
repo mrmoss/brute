@@ -17,6 +17,7 @@ inline void help()
 	printf("  --alpha STR   String of characters to use for password generation (default is all printable characters).\n");
 	printf("  --len INT     Length of passwords (default is 8).\n");
 	printf("  --maxlen INT  Length of passwords (includes passwords of size less than as well).\n");
+	printf("  --start STR   Password to start at.\n");
 	printf("  --show        Shows the passwords in stderr (nice for viewing current password when redirecting passwords to a file).\n");
 	exit(0);
 }
@@ -36,10 +37,13 @@ int main(int argc,char* argv[])
 	int alpha_len=strlen(default_alpha);
 	int pass_len=8;
 	int ii=0;
+	int jj=0;
+	int spot_test=-1;
 	int* spots=NULL;
 	char* pass=NULL;
 	int show=0;
 	int abs_len=1;
+	char* start_pass=NULL;
 
 	memset(alpha,0,strlen(default_alpha)+1);
 	strncpy(alpha,default_alpha,strlen(default_alpha));
@@ -96,6 +100,28 @@ int main(int argc,char* argv[])
 			pass_len=(int)strtol(argv[ii],NULL,10);
 			abs_len=0;
 		}
+		else if(strlen(argv[ii])==7&&strncmp(argv[ii],"--start",7)==0)
+		{
+			if(ii+1>=argc||strlen(argv[ii+1])<=0)
+			{
+				fprintf(stderr,"Expected argument after \"--start\".\n");
+				exit(1);
+			}
+
+			++ii;
+
+			free(start_pass);
+			start_pass=(char*)malloc(strlen(argv[ii])+1);
+
+			if(start_pass==NULL)
+			{
+				printf("Could not allocate memory for starting password.\n");
+				exit(1);
+			}
+
+			memset(start_pass,0,strlen(argv[ii])+1);
+			memcpy(start_pass,argv[ii],pass_len);
+		}
 		else if(strlen(argv[ii])==6&&strncmp(argv[ii],"--show",6)==0)
 		{
 			show=1;
@@ -112,10 +138,13 @@ int main(int argc,char* argv[])
 
 	fprintf(stderr,"Generating Passwords\n");
 
-	if(abs_len==1)
+	if(abs_len!=0)
 		fprintf(stderr,"  Length:       %d\n",pass_len);
 	else
 		fprintf(stderr,"  Max Length:   %d\n",pass_len);
+
+	if(start_pass!=NULL)
+		fprintf(stderr,"  Start:        %s\n",start_pass);
 
 	fprintf(stderr,"  Alphabet:     %s\n",alpha);
 
@@ -137,6 +166,29 @@ int main(int argc,char* argv[])
 
 		if(abs_len!=0)
 			memset(pass,alpha[0],pass_len);
+
+		if(start_pass!=NULL)
+		{
+			for(ii=0;ii<strlen(start_pass);++ii)
+			{
+				spot_test=-1;
+
+				for(jj=0;jj<alpha_len;++jj)
+				{
+					if(start_pass[ii]==alpha[jj])
+					{
+						spots[ii]=spot_test=jj;
+						break;
+					}
+				}
+
+				if(spot_test==-1)
+				{
+					fprintf(stderr,"Starting password contains characters not in the alphabet.\n");
+					exit(1);
+				}
+			}
+		}
 
 		while(1)
 		{
