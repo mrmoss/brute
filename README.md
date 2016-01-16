@@ -1,6 +1,6 @@
 Brute - A password generator.
 
-Usage:  ./brute [--help] [--alpha STR] [--len INT] [--maxlen INT] [--show]
+Usage:  ./brute [--help] [--alpha STR] [--len INT] [--maxlen INT] [--start STR] [--show]
 
   --help        Show this menu.
 

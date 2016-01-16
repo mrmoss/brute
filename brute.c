@@ -12,7 +12,7 @@ inline void print(char* pass,int show)
 
 inline void help()
 {
-	printf("Usage:  ./brute [--help] [--alpha STR] [--len INT] [--maxlen INT] [--show]\n");
+	printf("Usage:  ./brute [--help] [--alpha STR] [--len INT] [--maxlen INT] [--start STR] [--show]\n");
 	printf("  --help        Show this menu.\n");
 	printf("  --alpha STR   String of characters to use for password generation (default is all printable characters).\n");
 	printf("  --len INT     Length of passwords (default is 8).\n");
