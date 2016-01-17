@@ -31,6 +31,7 @@ int main(int argc,char* argv[])
 	if(alpha==NULL)
 	{
 		printf("Could not allocate memory for alphabet.\n");
+		free(alpha);
 		exit(1);
 	}
 
@@ -59,6 +60,8 @@ int main(int argc,char* argv[])
 			if(ii+1>=argc||strlen(argv[ii+1])<=0)
 			{
 				fprintf(stderr,"Expected argument after \"--alpha\".\n");
+				free(alpha);
+				free(start_pass);
 				exit(1);
 			}
 
@@ -69,6 +72,8 @@ int main(int argc,char* argv[])
 			if(alpha==NULL)
 			{
 				printf("Could not allocate memory for alphabet.\n");
+				free(alpha);
+				free(start_pass);
 				exit(1);
 			}
 
@@ -81,6 +86,8 @@ int main(int argc,char* argv[])
 			if(ii+1>=argc)
 			{
 				fprintf(stderr,"Expected argument after \"--len\".\n");
+				free(alpha);
+				free(start_pass);
 				exit(1);
 			}
 
@@ -93,6 +100,8 @@ int main(int argc,char* argv[])
 			if(ii+1>=argc)
 			{
 				fprintf(stderr,"Expected argument after \"--maxlen\".\n");
+				free(alpha);
+				free(start_pass);
 				exit(1);
 			}
 
@@ -105,6 +114,8 @@ int main(int argc,char* argv[])
 			if(ii+1>=argc||strlen(argv[ii+1])<=0)
 			{
 				fprintf(stderr,"Expected argument after \"--start\".\n");
+				free(alpha);
+				free(start_pass);
 				exit(1);
 			}
 
@@ -116,6 +127,8 @@ int main(int argc,char* argv[])
 			if(start_pass==NULL)
 			{
 				printf("Could not allocate memory for starting password.\n");
+				free(alpha);
+				free(start_pass);
 				exit(1);
 			}
 
@@ -129,6 +142,8 @@ int main(int argc,char* argv[])
 		else
 		{
 			fprintf(stderr,"Unknown argument \"%s\".\n",argv[ii]);
+			free(alpha);
+			free(start_pass);
 			exit(1);
 		}
 	}
@@ -157,7 +172,13 @@ int main(int argc,char* argv[])
 		pass=(char*)malloc(pass_len+1);
 
 		if(spots==NULL||pass==NULL)
+		{
+			free(alpha);
+			free(start_pass);
+			free(spots);
+			free(pass);
 			return 1;
+		}
 
 		for(ii=0;ii<pass_len;++ii)
 			spots[ii]=-1;
@@ -185,6 +206,10 @@ int main(int argc,char* argv[])
 				if(spot_test==-1)
 				{
 					fprintf(stderr,"Starting password contains characters not in the alphabet.\n");
+					free(alpha);
+					free(start_pass);
+					free(spots);
+					free(pass);
 					exit(1);
 				}
 			}
@@ -218,6 +243,7 @@ int main(int argc,char* argv[])
 			fprintf(stderr,"\n  Done.\n");
 
 		free(alpha);
+		free(start_pass);
 		free(spots);
 		free(pass);
 
