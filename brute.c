@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-inline void print(char* pass,int show)
+void print(char* pass,int show)
 {
 	printf("%s\n",pass);
 
@@ -10,7 +10,7 @@ inline void print(char* pass,int show)
 		fprintf(stderr,"\r  Current:      %s",pass);
 }
 
-inline void help()
+void help()
 {
 	printf("Usage:  ./brute [--help] [--alpha STR] [--len INT] [--maxlen INT] [--start STR] [--show]\n");
 	printf("  --help        Show this menu.\n");
@@ -47,7 +47,7 @@ int main(int argc,char* argv[])
 	char* start_pass=NULL;
 
 	memset(alpha,0,strlen(default_alpha)+1);
-	strncpy(alpha,default_alpha,strlen(default_alpha));
+	strncpy(alpha,default_alpha,strlen(default_alpha)+1);
 
 	for(ii=1;ii<argc;++ii)
 	{
